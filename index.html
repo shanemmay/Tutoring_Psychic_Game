@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <h1>Wins:<span id="wins"></span></h1>
+    <h1>Loses:<span id="losses"></span></h1>
+    <h1>Guesses Left:<span id="guessesLeft"></span></h1>
+    <h1>Letters Guessed:<span id="lettersGuessed"></span></h1>
+
+    <script>
+        //variables
+        let answer = String.fromCharCode(Math.floor(Math.random() * (90 - 65 + 1)) + 65);
+        let numOfWins = 0, numOfLosses = 0, numOfGuessesLeft = 9;
+        let lettersGuessed = [];
+        let guess = '';
+
+        //display objects from the DOM
+        let winsDisplay = document.querySelector("#wins");
+        let lossesDisplay = document.querySelector("#losses");
+        let guessesLeftDisplay = document.querySelector("#guessesLeft");
+        let lettersGuessedDisplay = document.querySelector("#lettersGuessed");
+
+        //functions
+        let reset = (gameWon)  => 
+        {
+            answer = String.fromCharCode(Math.floor(Math.random() * (90 - 65 + 1)) + 65); 
+            console.log(`Answer is: ${answer}` );
+            if(gameWon)
+            {
+                numOfWins++;
+                resetDisplay();
+            }
+            else
+            {
+                numOfLosses++;
+                resetDisplay();
+            }
+            numOfGuessesLeft = 9;
+            lettersGuessed = [];
+            resetDisplay();
+        }
+
+        let resetDisplay = () =>
+        {
+            winsDisplay.innerHTML = numOfWins;
+            lossesDisplay.innerHTML = numOfLosses;
+            guessesLeftDisplay.innerHTML = numOfGuessesLeft;
+            lettersGuessedDisplay.innerHTML = lettersGuessed;
+        }
+
+        //setting initial display
+        resetDisplay();
+
+        //TODO: delete this before final
+        console.log(`Answer is: ${answer}` );
+
+        //handling when key is pressed
+        $(document).keydown(function(e){
+        if (e.keyCode > -1 )
+            
+            guess = String.fromCharCode(e.keyCode);
+            console.log(`You Pressed : ${guess}`);
+            
+            //checking if guess is right
+            if(guess == answer)
+            {
+                console.log("True");
+                reset(true);
+            }
+            //if the guess is wrong
+            else
+            {
+                numOfGuessesLeft--;
+                //checking if game is over
+                if(numOfGuessesLeft < 1)
+                {
+                    reset(false);
+                }
+                //if game isn't over
+                else
+                {
+                    lettersGuessed.push(guess);
+                    resetDisplay();
+                }
+                
+            }
+            
+        });
+
+
+        
+    </script>
+</body>
+</html>
